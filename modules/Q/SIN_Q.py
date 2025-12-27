@@ -1,10 +1,13 @@
 # Бердичевский Максим, гр. 4381
 
 from modules.Q.DIV_QQ_Q import DIV_QQ_Q_f
+from modules.Q.NEG_Q import NEG_Q_f, NEGDEF_Q_f
 from modules.Q.Q_NUM import QNum, NNum
 from modules.N.ADD_1N_N import ADD_1N_N_f
 from modules.N.com_nn_d import COM_NN_D_f
 from modules.N.MUL_NN_N import MUL_NN_N_f
+from modules.Q.TRUNC_Q import TRUNC_Q_f
+from modules.Z.POZ_Z_D import POZ_Z_D_f
 from modules.Z.TRANS_N_Z import TRANS_N_Z_f
 from modules.Q.TRANS_Z_Q import TRANS_Z_Q_f
 from modules.Q.POW_Q import POW_Q_f
@@ -30,11 +33,11 @@ def SIN_Q_f(radians: QNum) -> QNum:
     border = NNum(1, [5])
     while COM_NN_D_f(i, border) != 0:
         k = ADD_1N_N_f(MUL_NN_N_f(two, i))
-        term = DIV_QQ_Q_f(POW_Q_f(x, k), TRANS_Z_Q_f(TRANS_N_Z_f(FACT_N_f(k))))
+        term = TRUNC_Q_f(DIV_QQ_Q_f(POW_Q_f(x, k), TRANS_Z_Q_f(TRANS_N_Z_f(FACT_N_f(k)))), 6)
         if sign == 1:
             sin = ADD_QQ_Q_f(sin, term)
         else:
             sin = SUB_QQ_Q_f(sin, term)
         sign *= -1
         i = ADD_1N_N_f(i)
-    return sin
+    return TRUNC_Q_f(sin, 6)

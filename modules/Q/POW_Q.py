@@ -3,6 +3,7 @@
 from modules.Q.Q_NUM import QNum, ZNum, NNum
 from modules.Q.MUL_QQ_Q import MUL_QQ_Q_f
 from modules.N.NZER_N_B import NZER_N_B_f
+from modules.Q.TRUNC_Q import TRUNC_Q_f
 from modules.Z.DIV_ZZ_Z import DIV_ZZ_Z_f
 from modules.Z.MOD_ZZ_Z import MOD_ZZ_Z_f
 from modules.Z.POZ_Z_D import POZ_Z_D_f
@@ -28,4 +29,4 @@ def POW_Q_f(num: QNum, k: NNum) -> QNum:
             res = MUL_QQ_Q_f(res, temp)
         temp = MUL_QQ_Q_f(temp, temp)
         power = DIV_ZZ_Z_f(power, two)
-    return res
+    return TRUNC_Q_f(res, 6)
