@@ -10,7 +10,7 @@ from modules.Q.ADD_QQ_Q import ADD_QQ_Q_f
 from modules.Q.DIV_QQ_Q import DIV_QQ_Q_f
 
 
-def SQRT_Q_f(num: QNum, count=4) -> QNum:
+def SQRT_Q_f(num: QNum, count=5) -> QNum:
     """
     Возвращает квадратный корень из рационального числа.
 

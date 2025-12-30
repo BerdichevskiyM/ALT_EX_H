@@ -63,7 +63,7 @@ class QuaternionApp:
             "Косинус угла",
             "Умножение Re × Im",
             "Кватернион поворота",
-            "Дефолтный кватернион"
+            "Дефолтный кватернион (чистый)"
         ]
 
         method_frame = tk.Frame(root, bg=self.bg_color)

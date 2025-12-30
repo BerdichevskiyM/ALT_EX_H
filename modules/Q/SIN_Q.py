@@ -1,7 +1,8 @@
 # Бердичевский Максим, гр. 4381
 
 from modules.Q.DIV_QQ_Q import DIV_QQ_Q_f
-from modules.Q.NEG_Q import NEG_Q_f, NEGDEF_Q_f
+from modules.Q.MUL_QQ_Q import MUL_QQ_Q_f
+from modules.Q.PI_Q import PI_Q_f
 from modules.Q.Q_NUM import QNum, NNum
 from modules.N.ADD_1N_N import ADD_1N_N_f
 from modules.N.com_nn_d import COM_NN_D_f
@@ -15,6 +16,7 @@ from modules.N.FACT_N import FACT_N_f
 from modules.Q.ADD_QQ_Q import ADD_QQ_Q_f
 from modules.Q.SUB_QQ_Q import SUB_QQ_Q_f
 from modules.Q.DEF_Q import DEF_Q_f
+from modules.Z.Z_NUM import ZNum
 
 
 def SIN_Q_f(radians: QNum) -> QNum:
@@ -26,6 +28,11 @@ def SIN_Q_f(radians: QNum) -> QNum:
     Возврат - QNum.
     """
     x = radians
+    two_pi = MUL_QQ_Q_f(PI_Q_f(), QNum(ZNum(0, NNum(1, [2])), NNum(1, [1])))
+    while POZ_Z_D_f(SUB_QQ_Q_f(x, two_pi).num_tor) == 2:
+        x = SUB_QQ_Q_f(x, two_pi)
+    while POZ_Z_D_f(ADD_QQ_Q_f(x, two_pi).num_tor) == 1:
+        x = ADD_QQ_Q_f(x, two_pi)
     sin = DEF_Q_f()
     sign = 1
     i = NNum(1, [0])
