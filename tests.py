@@ -265,6 +265,7 @@ def test_module_H():
         assert inv1.y.num_tor.A == [0]
         assert inv1.z.num_tor.A == [0]
 
+
         h2 = create_h(2, 0, 0, 0)
         inv2 = INV_H_f(h2)
         assert inv2.s.num_tor.A == [1] and inv2.s.den_tor.A == [2]
