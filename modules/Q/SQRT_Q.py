@@ -15,6 +15,7 @@ def SQRT_Q_f(num: QNum, count=5) -> QNum:
     Возвращает квадратный корень из рационального числа.
 
     num - значение типа QNum.
+    count - кол-во итераций цикла.
 
     Возврат - QNum.
     """
@@ -26,6 +27,7 @@ def SQRT_Q_f(num: QNum, count=5) -> QNum:
     if num.num_tor.n > num.den_tor.n:
         sqrt = DIV_QQ_Q_f(num, QNum(ZNum(0, NNum(1, [2])), NNum(1, [1])))
     half = QNum(ZNum(0, NNum(1, [1])), NNum(1, [2]))
+    # Используется метод Ньютона для квадратного корня # x{n+1} = 0.5 * (x{n} + num / x{n})
     for _ in range(count):
         next_sqrt = MUL_QQ_Q_f(half, ADD_QQ_Q_f(sqrt, DIV_QQ_Q_f(num, sqrt)))
         sqrt = next_sqrt

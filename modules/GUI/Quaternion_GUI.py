@@ -225,7 +225,7 @@ class QuaternionApp:
                 self.second_input_entry.pack(fill=tk.X, pady=(0, 15), ipady=8)
         
         # Дефолтный кватернион (ничего не требует)
-        elif method_name == "Дефолтный кватернион":
+        elif method_name == "Дефолтный кватернион (чистый)":
             # Скрываем все поля
             if self._is_packed(self.first_quaternion_label):
                 self.first_quaternion_label.pack_forget()
@@ -249,7 +249,7 @@ class QuaternionApp:
         self._set_result('')
 
         try:
-            if method_name == "Дефолтный кватернион":
+            if method_name == "Дефолтный кватернион (чистый)":
                 result = DEF_H_f()
                 self._set_result(f"Результат: {HNum_to_string(result)}")
                 return

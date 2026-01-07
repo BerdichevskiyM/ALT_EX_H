@@ -136,5 +136,6 @@ def test_SIN_Q_periodicity():
         diff = abs(q_to_float(sin_x) - q_to_float(sin_x_plus_2pi))
         assert diff < 0.01
 
+
 if __name__ == "__main__":
     pytest.main()
