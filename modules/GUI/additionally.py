@@ -1,3 +1,4 @@
+import re
 from modules.N.N_NUM import NNum
 from modules.Z.Z_NUM import ZNum
 from modules.Q.Q_NUM import QNum
@@ -26,10 +27,20 @@ def is_Integer(number):
         return is_Natural(number)
 
 
+def _replace_pi(string):
+    """Заменяет 'pi' на '355/113' в строке (только целое слово 'pi')"""
+    # Заменяем 'pi' только как отдельное слово (не как часть другого слова)
+    return re.sub(r'\bpi\b', '355/113', string, flags=re.IGNORECASE)
+
+
 def is_Rational(number):
-    """Проверяет, является ли строка рациональным числом (дробью)"""
+    """Проверяет, является ли строка рациональным числом (дробью)
+    Поддерживает 'pi' как замену для 355/113
+    """
     if not isinstance(number, str) or number == '':
         return False
+    # Заменяем 'pi' на '355/113' для проверки
+    number = _replace_pi(number)
     if number.count('/') > 1:
         return False
     elif number.count('/') == 1:
@@ -144,7 +155,11 @@ def get_Integer(string):
 
 
 def get_Rational(string):
-    """Преобразует строку в объект QNum"""
+    """Преобразует строку в объект QNum
+    Поддерживает 'pi' как замену для 355/113 при вводе
+    """
+    # is_Rational уже заменяет 'pi' на '355/113', но нужно заменить и здесь для парсинга
+    string = _replace_pi(string)
     if not is_Rational(string):
         raise ValueError('Введенное число не является рациональным')
     if '/' in string:
@@ -300,13 +315,19 @@ def is_Quaternion(string):
 def get_Quaternion(string):
     """Преобразует строку в объект HNum
     Формат: "s/d x/d y/d z/d" - четыре рациональных числа через пробел
+    Поддерживает 'pi' как замену для 355/113 в любой компоненте при вводе
     """
-    if not is_Quaternion(string):
-        raise ValueError('Введенное выражение не является кватернионом')
-    
+    # Заменяем 'pi' на '355/113' в каждой части перед проверкой
     parts = string.split()
     if len(parts) != 4:
         raise ValueError('Кватернион должен содержать 4 компоненты')
+    
+    # Заменяем 'pi' в каждой части
+    parts = [_replace_pi(part) for part in parts]
+    string_processed = ' '.join(parts)
+    
+    if not is_Quaternion(string_processed):
+        raise ValueError('Введенное выражение не является кватернионом')
     
     s = get_Rational(parts[0])
     x = get_Rational(parts[1])
@@ -320,24 +341,22 @@ def HNum_to_string(hnum: HNum) -> str:
     """Преобразует HNum в строку
     Формат вывода: "s + x∙i + y∙j + z∙k"
     """
-    s_str = QNum_to_string(hnum.s)
-    x_str = QNum_to_string(hnum.x)
-    y_str = QNum_to_string(hnum.y)
-    z_str = QNum_to_string(hnum.z)
-    
-    # Проверяем, является ли компонента нулем
-    def is_zero(q_str):
-        return q_str == '0' or q_str == '0/1'
+    # Проверяем, является ли компонента нулем (проверяем числитель напрямую)
+    def is_zero(qnum: QNum):
+        """Проверяет, равен ли числитель нулю"""
+        return qnum.num_tor.n == 1 and qnum.num_tor.A[0] == 0
     
     # Формируем части кватерниона
     parts = []
     
     # Вещественная часть
-    if not is_zero(s_str):
+    if not is_zero(hnum.s):
+        s_str = QNum_to_string(hnum.s)
         parts.append(s_str)
     
     # Мнимая часть i
-    if not is_zero(x_str):
+    if not is_zero(hnum.x):
+        x_str = QNum_to_string(hnum.x)
         if parts:  # Если уже есть части, добавляем знак
             if x_str[0] == '-':
                 x_abs = x_str[1:]
@@ -359,7 +378,8 @@ def HNum_to_string(hnum: HNum) -> str:
                 parts.append(f"{x_str}∙i")
     
     # Мнимая часть j
-    if not is_zero(y_str):
+    if not is_zero(hnum.y):
+        y_str = QNum_to_string(hnum.y)
         if parts:  # Если уже есть части, добавляем знак
             if y_str[0] == '-':
                 y_abs = y_str[1:]
@@ -381,7 +401,8 @@ def HNum_to_string(hnum: HNum) -> str:
                 parts.append(f"{y_str}∙j")
     
     # Мнимая часть k
-    if not is_zero(z_str):
+    if not is_zero(hnum.z):
+        z_str = QNum_to_string(hnum.z)
         if parts:  # Если уже есть части, добавляем знак
             if z_str[0] == '-':
                 z_abs = z_str[1:]
